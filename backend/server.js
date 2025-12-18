@@ -1,14 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Serve the frontend (static) so visiting http://localhost:<PORT>/ shows the UI
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 mongoose
-.connect("mongodb+srv://20235333:20235333@it4409.tznavbh.mongodb.net/?appName=it4409")
+.connect(process.env.MONGO_URI)
 .then(() => console.log("Connected to MongoDB"))
 .catch((err) => console.error("MongoDB Error:", err));
 
@@ -137,8 +142,8 @@ app.delete("/api/users/:id", async (req, res) => {
 
 
 
+const PORT = process.env.PORT || 3001;
 
-
-app.listen(3001, () => {
-    console.log("Server is running on port 3001");
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
